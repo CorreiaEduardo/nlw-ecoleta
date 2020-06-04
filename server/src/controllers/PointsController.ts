@@ -52,7 +52,7 @@ class PointsController {
       uf,
     };
 
-    const insertedIds = await trx('point').insert(point);
+    const insertedIds = await trx('point').insert(point).returning('id');
 
     const pointId = insertedIds[0];
 

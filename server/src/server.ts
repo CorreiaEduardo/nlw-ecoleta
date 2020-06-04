@@ -11,7 +11,6 @@ app.use(express.json());
 app.use('/uploads', express.static(path.resolve(__dirname, '..', 'uploads')));
 app.use(routes);
 
-const port = 3333;
-app.listen(port, () => {
-  console.log(`Starting nlw-ecoleta-server on port ${port}`);
+app.listen(process.env.APP_PORT, () => {
+  console.log(`👌 Starting nlw-ecoleta-server on port ${process.env.APP_PORT}`);
 });
