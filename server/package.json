@@ -9,8 +9,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "env-cmd -f .env.development ts-node-dev --ignore-watch node_modules src/server.ts",
-    "knex:migrate": "knex --knexfile knexfile.ts migrate:latest",
-    "knex:seed": "knex --knexfile knexfile.ts seed:run",
+    "knex:migrate:dev": "env-cmd -f .env.development knex --knexfile knexfile.ts migrate:latest",
+    "knex:seed:dev": "env-cmd -f .env.development knex --knexfile knexfile.ts seed:run",
     "eslint": "eslint --fix --ext .ts src/"
   },
   "dependencies": {
