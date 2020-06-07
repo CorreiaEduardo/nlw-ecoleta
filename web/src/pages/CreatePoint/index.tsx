@@ -115,7 +115,6 @@ const CreatePoint = () => {
         const uf = selectedUf
         const city = selectedCity
         const [ lat, lng ] = selectedLatLgn
-        const itemsIds = items.map(item => item.id)
 
         const data = {
             name,
@@ -125,7 +124,7 @@ const CreatePoint = () => {
             city,
             lat,
             lng,
-            items: itemsIds
+            items: selectedItems
         }
         console.log(data)
         await ecoletaApi.post('points', data)
