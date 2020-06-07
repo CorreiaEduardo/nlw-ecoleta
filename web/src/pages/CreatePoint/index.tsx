@@ -9,6 +9,8 @@ import './styles.css'
 
 import { ecoletaApi, localidadesApi, IBGEUFResponse, IBGECityResponse } from '../../services/AxiosProvider'
 
+import Dropzone from '../../components/Dropzone'
+
 interface Item {
     id: number,
     title: string,
@@ -37,6 +39,8 @@ const CreatePoint = () => {
     const [selectedCity, setSelectedCity] = useState('0');
     const [selectedLatLgn, setSelectedLatLgn] = useState<[number, number]>([0,0]);
     const [selectedItems, setSelectedItems] = useState<number[]>([])
+
+    const [selectedFile, setSelectedFile] = useState<File>()
 
     const [formData, setFormData] = useState({
         name: '',
@@ -116,17 +120,21 @@ const CreatePoint = () => {
         const city = selectedCity
         const [ lat, lng ] = selectedLatLgn
 
-        const data = {
-            name,
-            email,
-            whatsapp,
-            uf,
-            city,
-            lat,
-            lng,
-            items: selectedItems
+        const data = new FormData()
+
+        data.append('name', name)
+        data.append('email', email)
+        data.append('whatsapp', whatsapp)
+        data.append('uf', uf)
+        data.append('city', city)
+        data.append('lat', String(lat))
+        data.append('lng', String(lng))
+        data.append('items', selectedItems.join(','))
+        
+        if(selectedFile){
+            data.append('image', selectedFile)
         }
-        console.log(data)
+        
         await ecoletaApi.post('points', data)
 
         alert('Ponto de coleta criado')
@@ -145,6 +153,7 @@ const CreatePoint = () => {
             <main>
                 <form onSubmit={handleSubmit}>
                     <h1>Cadastro do <br /> ponto de coleta</h1>
+                    <Dropzone onFileUploaded={setSelectedFile}/>
                     <fieldset>
                         <legend>
                             <h2>Dados</h2>

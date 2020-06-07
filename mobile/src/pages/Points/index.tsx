@@ -18,6 +18,7 @@ interface Item {
 interface Point {
   id: number;
   image: string;
+  imageUrl: string;
   name: string;
   lat: number;
   lng: number;
@@ -129,7 +130,7 @@ export default () => {
                     <Image
                       style={styles.mapMarkerImage}
                       source={{
-                        uri: point.image
+                        uri: point.imageUrl
                       }} />
                     <Text style={styles.mapMarkerTitle}>{point.name}</Text>
                   </View>

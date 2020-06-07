@@ -14,6 +14,7 @@ interface Params {
 interface Data {
   point: {
     image: string;
+    imageUrl: string;
     name: string;
     email: string;
     whatsapp: string;
@@ -69,7 +70,7 @@ export default () => {
 
         <Image
           style={styles.pointImage}
-          source={{ uri: data.point.image }} />
+          source={{ uri: data.point.imageUrl }} />
 
         <Text style={styles.pointName}>{data.point.name}</Text>
         <Text style={styles.pointItems}>{data.items.map(item => item.title).join(', ')}</Text>
