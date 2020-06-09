@@ -7,6 +7,7 @@ import { Ubuntu_700Bold, useFonts } from '@expo-google-fonts/ubuntu'
 import Routes from './src/routes'
 
 export default function App() {
+  console.disableYellowBox = true;
 
   const [fontsLoaded] = useFonts({
     Roboto_400Regular,
