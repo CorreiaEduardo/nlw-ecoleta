@@ -1,20 +1,81 @@
-import React, { useState, useEffect } from 'react'
-import { View, Image, ImageBackground, StyleSheet, Text, TextInput, KeyboardAvoidingView, Platform } from 'react-native'
+import React, { useState, useEffect, useRef, createRef } from 'react'
+import { View, Image, ImageBackground, StyleSheet, Text, TextInput, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native'
 import { RectButton } from 'react-native-gesture-handler'
 import { Feather as Icon } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
+import { Autocomplete } from 'react-native-dropdown-autocomplete';
+import { localidadesApi, IBGEUFResponse, IBGECityResponse } from '../../services/AxiosProvider'
 
-export default () => {
+interface UF {
+  id: number,
+  abbreviation: string,
+  name: string
+}
 
-  const [uf, setUf] = useState('')
-  const [city, setCity] = useState('')
+interface City {
+  id: number,
+  name: string
+}
 
+const Home = () => {
   const navigation = useNavigation();
+
+  const [selectedUF, setSelectedUF] = useState<UF>({} as UF)
+  const [selectedCity, setSelectedCity] = useState('')
+
+  const [ufs, setUfs] = useState<UF[]>([]);
+  const [cities, setCities] = useState<City[]>([]);
+
+
+  const [ufQuery, setUFQuery] = useState('')
+  const [cityQuery, setCityQuery] = useState('')
+  const [filteredUFs, setFilteredUFs] = useState<UF[]>([]);
+  const [filteredCities, setFilteredCities] = useState<City[]>([]);
+
+  useEffect(() => {
+    localidadesApi.get<IBGEUFResponse[]>('estados', { params: { orderBy: 'nome' } }).then(response => {
+      setUfs(response.data.map(uf => {
+        return { id: uf.id, name: uf.nome, abbreviation: uf.sigla }
+      }))
+    });
+  }, [])
+
+
+  useEffect(() => {
+    if (selectedUF.abbreviation === '0') return
+    localidadesApi.get<IBGECityResponse[]>(`estados/${selectedUF.id}/municipios`, { params: { orderBy: 'nome' } }).then(response => {
+      setCities(response.data.map(city => {
+        return { id: city.id, name: city.nome }
+      }))
+    });
+  }, [selectedUF])
+
+  useEffect(() => {
+    setFilteredUFs(ufs.filter(
+      (item: UF) =>
+        item.name.toLowerCase().indexOf(ufQuery.toLowerCase()) !== -1)
+    );
+  }, [ufQuery])
+
+  useEffect(() => {
+    setFilteredCities(cities.filter(
+      (item: City) =>
+        item.name.toLowerCase().indexOf(cityQuery.toLowerCase()) !== -1)
+    );
+  }, [cityQuery])
+
+  function handleSelectUFItem(item: UF, id: number) {
+    setSelectedUF(item)
+  }
+
+  function handleSelectCityItem(item: City, id: number) {
+    setSelectedCity(item.name)
+  }
 
   function handleNavigateToPoints() {
     navigation.navigate('Points', {
-      uf,
-      city
+      uf: selectedUF.abbreviation,
+      city: selectedCity
     });
   }
 
@@ -30,25 +91,50 @@ export default () => {
         <View style={styles.main}>
           <Image source={require('../../assets/logo.png')} />
           <Text style={styles.title}>Seu Marketplace de coleta de resíduos</Text>
-          <Text style={styles.description}>Ajudamos pessoas a encgontrarem pontos de coleta de forma eficiente.</Text>
+          <Text style={styles.description}>Ajudamos pessoas a encontrarem pontos de coleta de forma eficiente.</Text>
 
         </View>
 
         <View style={styles.footer}>
-          <TextInput
-            value={uf}
-            maxLength={2}
-            autoCapitalize="characters"
-            autoCorrect={false}
-            onChangeText={setUf}
-            style={styles.input}
-            placeholder="Digite a UF" />
-          <TextInput
-            value={city}
-            onChangeText={setCity}
-            autoCorrect={false}
-            style={styles.input}
-            placeholder="Digite a cidade" />
+
+          <View style={styles.autocompleteContainer}>
+            <SafeAreaView>
+              <Autocomplete
+                highlightText
+                highLightColor='#2FB86E'
+                placeholder="Digite o estado"
+                noDataText="Nenhum estado foi encontrado"
+                scrollStyle={styles.white}
+                pickerStyle={styles.picker}
+                inputStyle={styles.autoCompleteInput}
+                minimumCharactersCount={0}
+                handleSelectItem={(item, id) => handleSelectUFItem(item, id)}
+                fetchData={async () => filteredUFs}
+                valueExtractor={item => item.name}
+                onChangeText={setUFQuery}
+                rightContent
+                rightTextExtractor={item => item.sigla} />
+            </SafeAreaView>
+          </View>
+
+          <View style={styles.autocompleteContainer}>
+            <SafeAreaView>
+              <Autocomplete
+                highlightText
+                highLightColor='#2FB86E'
+                placeholder="Digite a cidade"
+                noDataText="Nenhuma cidade foi encontrada"
+                scrollStyle={styles.white}
+                pickerStyle={styles.picker}
+                inputStyle={styles.autoCompleteInput}
+                minimumCharactersCount={0}
+                handleSelectItem={(item, id) => handleSelectCityItem(item, id)}
+                fetchData={async () => filteredCities}
+                valueExtractor={item => item.name}
+                onChangeText={setCityQuery} />
+            </SafeAreaView>
+          </View>
+
           <RectButton style={styles.button} onPress={handleNavigateToPoints}>
             <View style={styles.buttonIcon}>
               <Text>
@@ -65,6 +151,8 @@ export default () => {
     </KeyboardAvoidingView>
   )
 }
+
+export default Home
 
 const styles = StyleSheet.create({
   container: {
@@ -137,5 +225,31 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontFamily: 'Roboto_500Medium',
     fontSize: 16,
+  },
+  autocompleteContainer: {
+    zIndex: 1,
+  },
+  autoCompleteInput: {
+    paddingLeft: 24,
+    height: 60,
+    borderColor: '#FFF',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    marginBottom: 8,
+    paddingHorizontal: 24,
+    fontSize: 16,
+    width: '100%',
+  },
+  white: {
+    borderColor: 'transparent',
+  },
+  picker: {
+    width: '100%',
+    borderTopStartRadius: 0,
+    borderTopEndRadius: 0,
+    borderRadius: 10,
+    marginStart: -36,
+    marginTop: -12,
+    elevation: 0
   }
 });
