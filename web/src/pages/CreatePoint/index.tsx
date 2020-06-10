@@ -1,6 +1,6 @@
 import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
 import { Link, useHistory } from 'react-router-dom'
-import { FiArrowLeft } from 'react-icons/fi'
+import { FiArrowLeft, FiCheckCircle } from 'react-icons/fi'
 import { Map, TileLayer, Marker } from 'react-leaflet'
 import { LeafletMouseEvent } from 'leaflet'
 
@@ -10,6 +10,7 @@ import './styles.css'
 import { ecoletaApi, localidadesApi, IBGEUFResponse, IBGECityResponse } from '../../services/AxiosProvider'
 
 import Dropzone from '../../components/Dropzone'
+import Modal from '../../components/InfoModal';
 
 interface Item {
     id: number,
@@ -41,12 +42,14 @@ const CreatePoint = () => {
     const [selectedItems, setSelectedItems] = useState<number[]>([])
 
     const [selectedFile, setSelectedFile] = useState<File>()
-
+    
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         whatsapp: ''
     });
+    
+    const [isModalVisible, setIsModalVisible] = useState(false)
 
     const history = useHistory()
 
@@ -137,12 +140,18 @@ const CreatePoint = () => {
         
         await ecoletaApi.post('points', data)
 
-        alert('Ponto de coleta criado')
-        history.push('/')
+        setIsModalVisible(true)
+        setTimeout(() => history.push('/'), 3000)
     }
 
     return (
         <div id="page-create-point">
+            <Modal
+                timerLabel='Voltando para a home em'
+                timer={3}
+                isVisible={isModalVisible}
+                Icon={FiCheckCircle}
+                title='Cadastro concluído!'/>
             <header>
                 <img src={logo} alt="Ecoleta" />
                 <Link to="/">
