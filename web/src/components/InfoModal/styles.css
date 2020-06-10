@@ -1,0 +1,33 @@
+.overlay {  
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  z-index: 99999;
+  left: 0;
+  top: 0;
+  background-color: rgb(14,10,20);
+  background-color: rgba(14,10,20, 0.95);
+  overflow-x: hidden;
+  transition: 0.5s;
+}
+
+.overlay-content {
+  position: relative;
+  top: 50%;
+  width: 100%;
+  text-align: center; 
+}
+
+.modal-title{
+  color: #F0F0F5;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 36px;
+  line-height: 42px;
+  
+}
+
+h2 + p {
+  margin-top: 10px;
+}
