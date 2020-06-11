@@ -1,0 +1,27 @@
+header {
+  margin-top: 48px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header a {
+  color: var(--title-color);
+  font-weight: bold;
+  text-decoration: none;
+
+  display: flex;
+  align-items: center;
+}
+
+header a svg {
+  margin-right: 16px;
+  color: var(--primary-color);
+}
+
+@media(max-width: 520px) {
+  header .button-label {
+    display: none;
+  }
+}
