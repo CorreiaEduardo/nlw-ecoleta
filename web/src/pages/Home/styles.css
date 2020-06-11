@@ -36,7 +36,9 @@
   line-height: 38px;
 }
 
-#page-home .content main a {
+#page-home .content main button {
+  cursor: pointer;
+  border: 0px;
   width: 100%;
   max-width: 360px;
   height: 72px;
@@ -51,7 +53,7 @@
   margin-top: 40px;
 }
 
-#page-home .content main a span {
+#page-home .content main button span {
   display: block;
   background: rgba(0, 0, 0, 0.08);
   width: 72px;
@@ -63,19 +65,19 @@
   transition: background-color 0.2s;
 }
 
-#page-home .content main a span svg {
+#page-home .content main button span svg {
   color: #FFF;
   width: 20px;
   height: 20px;
 }
 
-#page-home .content main a strong {
+#page-home .content main button strong {
   flex: 1;
   text-align: center;
   color: #FFF;
 }
 
-#page-home .content main a:hover {
+#page-home .content main button:hover {
   background: #2FB86E;
 }
 @media(min-width: 1600px) {

@@ -1,4 +1,4 @@
-.overlay {  
+#info-modal {  
   height: 100%;
   width: 100%;
   position: fixed;
@@ -11,14 +11,14 @@
   transition: 0.5s;
 }
 
-.overlay-content {
+#info-modal .overlay-content {
   position: relative;
   top: 50%;
   width: 100%;
   text-align: center; 
 }
 
-.modal-title{
+#info-modal .modal-title{
   color: #F0F0F5;
   font-family: Roboto;
   font-style: normal;
@@ -28,6 +28,6 @@
   
 }
 
-h2 + p {
+#info-modal h2 + p {
   margin-top: 10px;
 }

@@ -21,18 +21,21 @@ interface Item {
 const ViewPoints = () => {
   const [points, setPoints] = useState<Point[]>([])
 
+  const cityFilter = new URLSearchParams(window.location.search).get('city')
+  const ufFilter = new URLSearchParams(window.location.search).get('uf')
+
   useEffect(() => {
     ecoletaApi.get('points', {
       params: {
-        city: 'Salvador',
-        uf: 'BA',
+        city: cityFilter,
+        uf: ufFilter,
         items: [1, 2, 3, 4, 5, 6]
       }
     }).then(response => {
       setPoints(response.data.points)
     })
 
-  }, [])
+  }, [cityFilter, ufFilter])
 
   return (
     <div id="page-view-points" style={{backgroundColor: 'white'}}>
