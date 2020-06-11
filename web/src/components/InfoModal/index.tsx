@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { IconType } from 'react-icons/lib/cjs'
 import './styles.css'
 
@@ -21,7 +21,7 @@ const InfoModal: React.FC<Props> = ({ isVisible, title, Icon, timerLabel, timer 
         return null
 
     return (
-        <div className='overlay'>
+        <div id="info-modal">
             <div className='overlay-content'>
                 <Icon size={64} color='#34CB79' />
                 <h2 className='modal-title'>{title}</h2>

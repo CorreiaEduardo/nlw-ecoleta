@@ -1,7 +1,8 @@
 #page-home {
-  height: 100vh;
+  width: 100%;
 
-  background: url('../../assets/home-background.svg') no-repeat 700px bottom;
+  height: 100vh;
+  background: url('../../assets/home-background.svg') no-repeat 550px bottom;
 }
 
 #page-home .content {
@@ -13,11 +14,6 @@
 
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-}
-
-#page-home .content header {
-  margin: 48px 0 0;
 }
 
 #page-home .content main {
@@ -40,7 +36,9 @@
   line-height: 38px;
 }
 
-#page-home .content main a {
+#page-home .content main button {
+  cursor: pointer;
+  border: 0px;
   width: 100%;
   max-width: 360px;
   height: 72px;
@@ -55,7 +53,7 @@
   margin-top: 40px;
 }
 
-#page-home .content main a span {
+#page-home .content main button span {
   display: block;
   background: rgba(0, 0, 0, 0.08);
   width: 72px;
@@ -67,19 +65,19 @@
   transition: background-color 0.2s;
 }
 
-#page-home .content main a span svg {
+#page-home .content main button span svg {
   color: #FFF;
   width: 20px;
   height: 20px;
 }
 
-#page-home .content main a strong {
+#page-home .content main button strong {
   flex: 1;
   text-align: center;
   color: #FFF;
 }
 
-#page-home .content main a:hover {
+#page-home .content main button:hover {
   background: #2FB86E;
 }
 @media(min-width: 1600px) {
@@ -89,13 +87,10 @@
 }
 
 @media(max-width: 900px) {
-  #page-home .content {
+  #page-home .content main {
+    margin: 0 auto;
     align-items: center;
     text-align: center;
-  }
-
-  #page-home .content header {
-    margin: 48px auto 0;
   }
 
   #page-home .content main {
