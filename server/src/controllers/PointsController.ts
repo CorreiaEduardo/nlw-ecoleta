@@ -17,12 +17,22 @@ class PointsController {
       .distinct()
       .select('point.*');
 
-    const serializedPoints = points.map((point) => {
-      return {
-        ...point,
-        imageUrl: `${process.env.HOST_URL}/uploads/${point.image}`,
-      };
-    });
+    const serializedPoints = await Promise.all(
+      points.map(async (point) => {
+        const pointItems = await knex('item')
+          .join('point_item', 'item.id', '=', 'point_item.item_id')
+          .where('point_item.point_id', point.id)
+          .select('item.title');
+
+        const serialized = {
+          ...point,
+          items: pointItems,
+          imageUrl: `${process.env.HOST_URL}/uploads/${point.image}`,
+        };
+
+        return serialized;
+      })
+    );
 
     return res.json({ points: serializedPoints });
   }
